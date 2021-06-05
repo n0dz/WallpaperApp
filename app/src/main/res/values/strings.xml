@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Wall</string>
+    <string name="search_wallpapers">Search wallpapers</string>
+    <string name="search">Search</string>
+</resources>

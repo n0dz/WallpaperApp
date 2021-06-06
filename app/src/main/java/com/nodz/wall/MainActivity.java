@@ -7,11 +7,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         dialog.setMessage("Loading Images ");
         dialog.setTitle("Loading");
 
+
+
         findbtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -63,14 +67,16 @@ public class MainActivity extends AppCompatActivity {
                 et.setVisibility(View.INVISIBLE);
                 findbtn.setVisibility(View.INVISIBLE);
 
+                //Hide the keyboard after search
+                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
                 json_url = base + et.getText();
                 GetData getdata = new GetData();
                 getdata.execute();
 
             }
         });
-
-
     }
     public class GetData extends AsyncTask<String, String, String> {
         @Override
@@ -125,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                     WallModel model = new WallModel(context, list);
                     model.setDown(jsonObject1.getString("downloads"));
                     model.setLike(jsonObject1.getString("tags"));
-                    model.setUrl(jsonObject1.getString("webformatURL"));
+                    model.setUrl(jsonObject1.getString("largeImageURL"));
 
                     list.add(model);
                 }

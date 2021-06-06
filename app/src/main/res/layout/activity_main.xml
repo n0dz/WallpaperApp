@@ -39,7 +39,7 @@
         android:background="@drawable/bg_btn"
         android:text="@string/search"
         android:textAllCaps="false"
-        android:textColor="#050505"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="@+id/query"

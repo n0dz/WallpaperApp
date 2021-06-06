@@ -1,23 +1,20 @@
 package com.nodz.wall;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-
-import com.bumptech.glide.Glide;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     String json_url="";
     EditText et;
     Button findbtn;
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +51,15 @@ public class MainActivity extends AppCompatActivity {
         et = findViewById(R.id.query);
         findbtn = findViewById(R.id.search);
 
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Loading Images ");
+        dialog.setTitle("Loading");
+
         findbtn.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-
+                dialog.show();
                 et.setVisibility(View.INVISIBLE);
                 findbtn.setVisibility(View.INVISIBLE);
 
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
 
     }
     public class GetData extends AsyncTask<String, String, String> {
@@ -136,6 +140,8 @@ public class MainActivity extends AppCompatActivity {
         WallAdapter adapter = new WallAdapter(this,list);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        dialog.dismiss();
+
 
     }
 }

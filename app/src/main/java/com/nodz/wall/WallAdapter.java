@@ -3,6 +3,7 @@ package com.nodz.wall;
 import android.content.Context;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 
 import java.util.ArrayList;
@@ -42,10 +45,10 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.MyViewHolder>{
         holder.likes.setText(model.getLike());
 
         Glide.with(context)
-                .load(model.getUrl())
+                .load(model.getUrl()).override(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT)
                 .into(holder.pict);
 
-       /* Glide.with(context)
+       /*Glide.with(context)
                 .asBitmap()
                 .load(model.getUrl())
                 .into(new SimpleTarget<Bitmap>() {
@@ -56,7 +59,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.MyViewHolder>{
                         int h = bitmap.getHeight();
                         holder.pict.setImageBitmap(bitmap);
                     }
-                }); */
+                });*/
 
         holder.pict.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,10 +70,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.MyViewHolder>{
 
             }
         });
-
     }
-
-
         @Override
         public int getItemCount () {
             //list.size();

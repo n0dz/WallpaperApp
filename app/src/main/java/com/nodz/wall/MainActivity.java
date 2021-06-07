@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                dialog.show();
+
                 et.setVisibility(View.INVISIBLE);
                 findbtn.setVisibility(View.INVISIBLE);
 
@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
                     WallModel model = new WallModel(context, list);
-                    model.setDown(jsonObject1.getString("downloads"));
+                    //model.setDown(jsonObject1.getString("downloads"));
                     model.setLike(jsonObject1.getString("tags"));
                     model.setUrl(jsonObject1.getString("largeImageURL"));
 
@@ -145,9 +145,7 @@ public class MainActivity extends AppCompatActivity {
 
         WallAdapter adapter = new WallAdapter(this,list);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        dialog.dismiss();
-
+        recyclerView.setLayoutManager(new GridLayoutManager(this,2));
 
     }
 }

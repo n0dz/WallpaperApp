@@ -1,5 +1,6 @@
 package com.nodz.wall;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.WallpaperManager;
@@ -23,10 +24,9 @@ import java.net.URL;
 public class SetWallpaperActivity extends AppCompatActivity {
 
     ImageView im;
-    Button bt;
+    Button btnSetwall;
     String ImgUrl = "";
     Bitmap bitmap;
-    ImageButton ib;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +34,11 @@ public class SetWallpaperActivity extends AppCompatActivity {
         setContentView(R.layout.activity_set_wallpaper);
 
         im = findViewById(R.id.imageWall);
-        bt = findViewById(R.id.setwallpaper);
-        ib = findViewById(R.id.imageButton);
+        btnSetwall = findViewById(R.id.setwallpaper);
+
+//        ActionBar actionBar = getSupportActionBar();
+//        actionBar.setTitle(getResources().getString(R.string.app_name));
+//        actionBar.setDisplayHomeAsUpEnabled(true);
 
         Intent i = getIntent();
         ImgUrl = i.getStringExtra("ImgUrl");
@@ -48,15 +51,7 @@ public class SetWallpaperActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ib.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SetWallpaperActivity.this,MainActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        bt.setOnClickListener(new View.OnClickListener() {
+        btnSetwall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -87,13 +82,14 @@ public class SetWallpaperActivity extends AppCompatActivity {
         protected void onPostExecute(Bitmap bitmap){
             super.onPostExecute(bitmap);
 
-        /*
+
+            /*
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
             int height = displayMetrics.heightPixels;
             int width = displayMetrics.widthPixels;
-            Bitmap b = Bitmap.createScaledBitmap(bitmap, width, height, true);
-        */
+            Bitmap b = Bitmap.createScaledBitmap(bitmap, width, height, true);*/
+
             WallpaperManager wallpaperManager = WallpaperManager.getInstance(getApplicationContext());
             try {
                 wallpaperManager.setBitmap(bitmap);

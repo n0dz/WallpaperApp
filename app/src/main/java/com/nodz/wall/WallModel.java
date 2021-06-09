@@ -6,23 +6,30 @@ import java.util.ArrayList;
 
 public class WallModel {
 
-    String like, down, url;
+    String tag, down, url;
+    Context context;
+    ArrayList<WallModel> list;
 
-    public WallModel(String like, String down, String url) {
-        this.like = like;
+    public WallModel(String tag, String down, String url) {
+        this.tag = tag;
         this.down = down;
         this.url = url;
     }
 
-    public WallModel(Context getData, ArrayList<WallModel> list) {
+    public WallModel(Context context, ArrayList<WallModel> list) {
+        this.context = context;
+        this.list = list;
     }
 
-    public String getLike() {
-        return like;
+    public WallModel() {
     }
 
-    public void setLike(String like) {
-        this.like = like;
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag){
+        this.tag = tag;
     }
 
     public String getDown() {

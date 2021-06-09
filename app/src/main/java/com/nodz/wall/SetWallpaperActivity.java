@@ -1,22 +1,28 @@
 package com.nodz.wall;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.app.WallpaperManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ColorSpace;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -24,24 +30,33 @@ import java.net.URL;
 public class SetWallpaperActivity extends AppCompatActivity {
 
     ImageView im;
-    Button btnSetwall;
-    String ImgUrl = "";
+    TextView tvTags;
+    Button btnSetWall, btnDownWall;
+    String ImgUrl = "", tags_text="";
     Bitmap bitmap;
+    String imageFileName = "IMG_" + System.currentTimeMillis() + ".jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_wallpaper);
 
-        im = findViewById(R.id.imageWall);
-        btnSetwall = findViewById(R.id.setwallpaper);
+        ActivityCompat.requestPermissions(SetWallpaperActivity.this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
+        ActivityCompat.requestPermissions(SetWallpaperActivity.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},1);
 
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setTitle(getResources().getString(R.string.app_name));
-//        actionBar.setDisplayHomeAsUpEnabled(true);
+        im = findViewById(R.id.imageWall);
+        btnSetWall = findViewById(R.id.setwallpaper);
+        btnDownWall = findViewById(R.id.getWallpaper);
+        tvTags = findViewById(R.id.tvTags);
+
+        getSupportActionBar().hide();
 
         Intent i = getIntent();
         ImgUrl = i.getStringExtra("ImgUrl");
+        tags_text = i.getStringExtra("Tags");
+
+
+        tvTags.setText(new WallModel().getTag());
 
         try {
             Glide.with(this)
@@ -51,7 +66,7 @@ public class SetWallpaperActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        btnSetwall.setOnClickListener(new View.OnClickListener() {
+        btnSetWall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -60,8 +75,50 @@ public class SetWallpaperActivity extends AppCompatActivity {
 
             }
         });
+
+        btnDownWall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveImage();
+            }
+        });
     }
-    public class GetImageFromUrl extends AsyncTask<String, Void, Bitmap>{
+
+    public void saveImage(){
+
+        BitmapDrawable drawable = (BitmapDrawable) im.getDrawable();
+        Bitmap bmp = drawable.getBitmap();
+
+        FileOutputStream outputStream = null;
+        File file = Environment.getExternalStorageDirectory();
+        File dir = new File(file.getAbsolutePath()+"/IMAGES");
+
+        if(!dir.exists())
+            dir.mkdir();
+
+        File outFile = new File(dir, imageFileName);
+        try{
+            outputStream = new FileOutputStream(outFile);
+            bmp.compress(Bitmap.CompressFormat.PNG,100, outputStream);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try{
+            outputStream.flush();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }try{
+            outputStream.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.i("PATH :",dir.getAbsolutePath());
+    }
+
+    public class GetImageFromUrl extends AsyncTask<String, Void, Bitmap> {
 
         @Override
         protected Bitmap doInBackground(String... url) {
@@ -76,27 +133,33 @@ public class SetWallpaperActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             return bitmap;
+
         }
 
         @Override
-        protected void onPostExecute(Bitmap bitmap){
+        protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
 
+            DisplayMetrics metrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            int height = metrics.heightPixels;
+            int width = metrics.widthPixels;
 
-            /*
-            DisplayMetrics displayMetrics = new DisplayMetrics();
-            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            int height = displayMetrics.heightPixels;
-            int width = displayMetrics.widthPixels;
-            Bitmap b = Bitmap.createScaledBitmap(bitmap, width, height, true);*/
+            int imageSize = 0;
+            imageSize = (height > width) ? width : height;
 
+            Bitmap bmp2 = Bitmap.createScaledBitmap(bitmap, imageSize, imageSize, true);
             WallpaperManager wallpaperManager = WallpaperManager.getInstance(getApplicationContext());
+//            wallpaperManager.setWallpaperOffsetSteps(1, 1);
+//            wallpaperManager.suggestDesiredDimensions(imageSize,imageSize);
             try {
-                wallpaperManager.setBitmap(bitmap);
+                wallpaperManager.setBitmap(bmp2);
                 Toast.makeText(SetWallpaperActivity.this, "Wallpaper Applied", Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
         }
     }
 }
+

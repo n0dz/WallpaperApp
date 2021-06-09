@@ -7,54 +7,69 @@
     tools:context=".SetWallpaperActivity">
 
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tvTags"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:text="Tags"
+        android:textColor="#952A63"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/imageWall"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/wallpaperapp"
-            android:textColor="@color/white"
-            android:textSize="28sp"
-            android:textStyle="bold|italic"
-            />
-
-    </androidx.appcompat.widget.Toolbar>
+        app:layout_constraintStart_toStartOf="@+id/imageWall"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageWall"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="400dp"
-        android:layout_marginBottom="8dp"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
-        android:layout_marginTop="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/setwallpaper"
+        android:cropToPadding="true"
+        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintTop_toBottomOf="@+id/tvTags"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <Button
-        android:id="@+id/setwallpaper"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="48dp"
-        android:background="@drawable/bg_btn"
-        android:text="Set Wallpaper"
-        android:textColor="@color/white"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp"
         app:layout_constraintBottom_toTopOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageWall">
+
+        <Button
+            android:id="@+id/getWallpaper"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn"
+            android:padding="5dp"
+            android:text="Download"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/setwallpaper"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn"
+            android:padding="5dp"
+            android:text="Set Wallpaper"
+            android:textColor="@color/white" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView"

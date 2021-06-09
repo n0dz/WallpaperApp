@@ -47,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().hide();
+
         recyclerView = findViewById(R.id.recyclerView);
         list = new ArrayList<>();
 
@@ -56,8 +58,6 @@ public class MainActivity extends AppCompatActivity {
         dialog = new ProgressDialog(this);
         dialog.setMessage("Loading Images ");
         dialog.setTitle("Loading");
-
-
 
         findbtn.setOnClickListener(new View.OnClickListener() {
 
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
                     WallModel model = new WallModel(context, list);
                     //model.setDown(jsonObject1.getString("downloads"));
-                    model.setLike(jsonObject1.getString("tags"));
+                    model.setTag(jsonObject1.getString("tags"));
                     model.setUrl(jsonObject1.getString("largeImageURL"));
 
                     list.add(model);

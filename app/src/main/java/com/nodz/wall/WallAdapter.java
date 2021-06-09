@@ -45,38 +45,23 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.MyViewHolder>{
     public void onBindViewHolder(@NonNull WallAdapter.MyViewHolder holder, int position) {
 
         WallModel model = list.get(position);
-        //holder.down.setText(model.getDown());
-        holder.likes.setText(model.getLike());
+        holder.tags.setText(model.getTag());
 
         RequestOptions options = new RequestOptions()
                 .centerCrop()
                 .placeholder(R.drawable.progress_animation)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .priority(Priority.HIGH)
                 .dontAnimate()
                 .dontTransform();
 
         Glide.with(context).load(model.getUrl()).apply(options).into(holder.pict);
-
-
-       /*Glide.with(context)
-                .asBitmap()
-                .load(model.getUrl())
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap bitmap,
-                                                Transition<? super Bitmap> transition) {
-                        int w = bitmap.getWidth();
-                        int h = bitmap.getHeight();
-                        holder.pict.setImageBitmap(bitmap);
-                    }
-                });*/
 
         holder.pict.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context,SetWallpaperActivity.class);
                 intent.putExtra("ImgUrl",model.getUrl());
+                intent.putExtra("Tags",model.getTag());
                 context.startActivity(intent);
 
             }
@@ -84,19 +69,17 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.MyViewHolder>{
     }
         @Override
         public int getItemCount () {
-            //list.size();
             return list.size();
         }
 
         public static class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView likes, down;
+            TextView tags, down;
             ImageView pict;
 
             public MyViewHolder(@NonNull View itemView) {
                 super(itemView);
 
-                likes = itemView.findViewById(R.id.tags);
-                //down = itemView.findViewById(R.id.down);
+                tags = itemView.findViewById(R.id.tags);
                 pict = itemView.findViewById(R.id.imageView);
 
             }

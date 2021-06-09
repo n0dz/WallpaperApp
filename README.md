@@ -3,7 +3,7 @@ Android application for wallpapers
 
 ## About the app
 - Search from a wide range of wallpapers
-- Download Wallpaper.
+- Download Wallpapers.
 
 ### ScreenShots
 

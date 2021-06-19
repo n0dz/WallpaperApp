@@ -1,4 +1,4 @@
-package com.nodz.wall;
+package com.nodz.wall.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -8,7 +8,6 @@ import android.app.WallpaperManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.ColorSpace;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
+import com.nodz.wall.R;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -47,7 +48,7 @@ public class SetWallpaperActivity extends AppCompatActivity {
         im = findViewById(R.id.imageWall);
         btnSetWall = findViewById(R.id.setwallpaper);
         btnDownWall = findViewById(R.id.getWallpaper);
-        tvTags = findViewById(R.id.tvTags);
+        //tvTags = findViewById(R.id.tvTags);
 
         getSupportActionBar().hide();
 
@@ -55,8 +56,7 @@ public class SetWallpaperActivity extends AppCompatActivity {
         ImgUrl = i.getStringExtra("ImgUrl");
         tags_text = i.getStringExtra("Tags");
 
-
-        tvTags.setText(new WallModel().getTag());
+        //tvTags.setText(tags_text);
 
         try {
             Glide.with(this)
@@ -115,6 +115,7 @@ public class SetWallpaperActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Toast.makeText(this, "Downloaded  :"+dir.getAbsolutePath(), Toast.LENGTH_LONG).show();
         Log.i("PATH :",dir.getAbsolutePath());
     }
 

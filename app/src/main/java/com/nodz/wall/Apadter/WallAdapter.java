@@ -1,4 +1,4 @@
-package com.nodz.wall;
+package com.nodz.wall.Apadter;
 
 import android.content.Context;
 
@@ -7,18 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import com.bumptech.glide.request.RequestOptions;
-
+import com.nodz.wall.Activity.SetWallpaperActivity;
+import com.nodz.wall.R;
+import com.nodz.wall.Model.WallModel;
 
 
 import java.util.ArrayList;
@@ -27,7 +27,6 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.MyViewHolder>{
 
     Context context;
     ArrayList<WallModel> list;
-    static ProgressBar progressBar;
 
     public WallAdapter(Context context, ArrayList<WallModel> list) {
         this.context = context;
@@ -46,20 +45,21 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.MyViewHolder>{
 
         WallModel model = list.get(position);
         holder.tags.setText(model.getTag());
+//
+//        RequestOptions options = new RequestOptions()
+//                .centerCrop()
+//                .placeholder(R.drawable.progress_animation)
+//                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                .dontAnimate()
+//                .dontTransform();
 
-        RequestOptions options = new RequestOptions()
-                .centerCrop()
-                .placeholder(R.drawable.progress_animation)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .dontAnimate()
-                .dontTransform();
-
-        Glide.with(context).load(model.getUrl()).apply(options).into(holder.pict);
+        Glide.with(context).load(model.getUrl()).placeholder(R.drawable.progress_animation).into(holder.pict);
+        // use .apply(options) for animations
 
         holder.pict.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context,SetWallpaperActivity.class);
+                Intent intent = new Intent(context, SetWallpaperActivity.class);
                 intent.putExtra("ImgUrl",model.getUrl());
                 intent.putExtra("Tags",model.getTag());
                 context.startActivity(intent);

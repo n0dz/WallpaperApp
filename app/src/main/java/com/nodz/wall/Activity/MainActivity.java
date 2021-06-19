@@ -1,22 +1,26 @@
-package com.nodz.wall;
+package com.nodz.wall.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.nodz.wall.R;
+import com.nodz.wall.Apadter.WallAdapter;
+import com.nodz.wall.Model.WallModel;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,14 +37,15 @@ public class MainActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     ArrayList<WallModel> list;
-    Context context;
-
     String base = "https://pixabay.com/api/?key=21942328-3b403fd14df4f4bef82d7991b&q=";
-    String end ="&image_type=photo";
-    String json_url="";
+    String json_url = "";
     EditText et;
     Button findbtn;
-    ProgressDialog dialog;
+
+    @Override
+    public void onBackPressed() {
+        // Do Here what ever you want do on back press;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,42 +55,47 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setVisibility(View.INVISIBLE);
         list = new ArrayList<>();
 
-        et = findViewById(R.id.query);
-        findbtn = findViewById(R.id.search);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
 
-        dialog = new ProgressDialog(this);
-        dialog.setMessage("Loading Images ");
-        dialog.setTitle("Loading");
+        et = findViewById(R.id.etQuery);
+        findbtn = findViewById(R.id.searchBtn);
 
-        findbtn.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
+        findbtn.setOnClickListener(new View.OnClickListener()
 
+            {
+
+                @Override
+                public void onClick (View v){
                 et.setVisibility(View.INVISIBLE);
                 findbtn.setVisibility(View.INVISIBLE);
 
+                json_url = base + et.getText().toString();
+
                 //Hide the keyboard after search
-                InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
 
-                json_url = base + et.getText();
-                GetData getdata = new GetData();
-                getdata.execute();
-
+                GetData getData = new GetData();
+                getData.execute();
+                recyclerView.setVisibility(View.VISIBLE);
             }
-        });
+            });
     }
+
+
     public class GetData extends AsyncTask<String, String, String> {
         @Override
         protected String doInBackground(String... strings) {
-            String current="";
-            try{
+            String current = "";
+            try {
                 URL url;
                 HttpURLConnection httpURLConnection = null;
-                try{
+                try {
                     url = new URL(json_url);
                     httpURLConnection = (HttpURLConnection) url.openConnection();
 
@@ -94,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
                     int data = isr.read();
 
-                    while(data != -1){
+                    while (data != -1) {
                         current += (char) data;
                         data = isr.read();
                     }
@@ -104,9 +114,8 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
-                }
-                finally {
-                    if(httpURLConnection != null){
+                } finally {
+                    if (httpURLConnection != null) {
                         httpURLConnection.disconnect();
                     }
                 }
@@ -116,19 +125,19 @@ public class MainActivity extends AppCompatActivity {
             return current;
         }
 
-        @SuppressLint("CheckResult")
         @Override
         protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
 
-            try{
                 JSONObject jsonObject = new JSONObject(s);
                 JSONArray jsonArray = jsonObject.getJSONArray("hits");
 
-                for(int i = 0; i <jsonArray.length(); i++){
+                for (int i = 0; i < jsonArray.length(); i++) {
 
                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
-                    WallModel model = new WallModel(context, list);
+                    WallModel model = new WallModel(getApplicationContext(), list);
                     //model.setDown(jsonObject1.getString("downloads"));
                     model.setTag(jsonObject1.getString("tags"));
                     model.setUrl(jsonObject1.getString("largeImageURL"));
@@ -138,14 +147,16 @@ public class MainActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
             loadDataIntoRecyclerView(list);
         }
     }
-    private void loadDataIntoRecyclerView(ArrayList<WallModel> list){
 
-        WallAdapter adapter = new WallAdapter(this,list);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new GridLayoutManager(this,2));
+            private void loadDataIntoRecyclerView(ArrayList<WallModel> list) {
+                WallAdapter adapter = new WallAdapter(this, list);
+                recyclerView.setAdapter(adapter);
+                recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
+            }
 
     }
-}

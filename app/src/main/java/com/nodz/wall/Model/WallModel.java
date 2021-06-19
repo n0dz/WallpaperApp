@@ -1,4 +1,4 @@
-package com.nodz.wall;
+package com.nodz.wall.Model;
 
 import android.content.Context;
 

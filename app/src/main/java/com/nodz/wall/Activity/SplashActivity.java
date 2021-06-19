@@ -1,15 +1,11 @@
-package com.nodz.wall;
+package com.nodz.wall.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.Priority;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
+import com.nodz.wall.R;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -17,6 +13,8 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+        getSupportActionBar().hide();
 
         Thread thread = new Thread(){
 

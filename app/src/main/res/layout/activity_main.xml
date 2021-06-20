@@ -20,13 +20,15 @@
             android:layout_height="40dp"
             android:layout_marginStart="20dp"
             android:hint="@string/search_wallpapers"
-            android:textColorHint="#C59393"
+            android:textColorHint="#FFF"
+            android:textAlignment="center"
             android:background="@drawable/bg_query"
             android:padding="10dp"
             android:textColor="#FFFF"
             android:layout_weight="2"
             android:layout_marginTop="4dp"
-            android:layout_marginLeft="20dp" />
+            android:layout_marginLeft="20dp"
+            android:gravity="center_horizontal" />
 
         <Button
             android:textColor="@color/white"

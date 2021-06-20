@@ -44,7 +44,8 @@
             <ImageView
                 android:id="@+id/imageWall"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="450dp"
+                android:scaleType="fitXY"
                 android:src="@drawable/loader_test" />
         </androidx.cardview.widget.CardView>
 

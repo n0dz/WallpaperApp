@@ -3,6 +3,7 @@ package com.nodz.wall.Apadter;
 import android.content.Context;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,7 @@ import com.nodz.wall.Model.WallModel;
 
 import java.util.ArrayList;
 
-public class WallAdapter extends RecyclerView.Adapter<WallAdapter.MyViewHolder>{
+public class WallAdapter extends RecyclerView.Adapter<WallAdapter.MyViewHolder> {
 
     Context context;
     ArrayList<WallModel> list;
@@ -45,8 +46,7 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.MyViewHolder>{
 
         WallModel model = list.get(position);
         holder.tags.setText(model.getTag());
-//
-//        RequestOptions options = new RequestOptions()
+        //        RequestOptions options = new RequestOptions()
 //                .centerCrop()
 //                .placeholder(R.drawable.progress_animation)
 //                .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -60,28 +60,30 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.MyViewHolder>{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, SetWallpaperActivity.class);
-                intent.putExtra("ImgUrl",model.getUrl());
-                intent.putExtra("Tags",model.getTag());
+                intent.putExtra("ImgUrl", model.getUrl());
+                intent.putExtra("TagFirst", model.getTag());
+
                 context.startActivity(intent);
 
             }
         });
     }
-        @Override
-        public int getItemCount () {
-            return list.size();
-        }
 
-        public static class MyViewHolder extends RecyclerView.ViewHolder {
-            TextView tags, down;
-            ImageView pict;
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
 
-            public MyViewHolder(@NonNull View itemView) {
-                super(itemView);
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView tags, down;
+        ImageView pict;
 
-                tags = itemView.findViewById(R.id.tags);
-                pict = itemView.findViewById(R.id.imageView);
+        public MyViewHolder(@NonNull View itemView) {
+            super(itemView);
 
-            }
+            tags = itemView.findViewById(R.id.tags);
+            pict = itemView.findViewById(R.id.imageView);
+
         }
     }
+}

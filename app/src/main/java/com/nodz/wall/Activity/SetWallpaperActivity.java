@@ -54,8 +54,11 @@ public class SetWallpaperActivity extends AppCompatActivity {
 
         Intent i = getIntent();
         ImgUrl = i.getStringExtra("ImgUrl");
-        tags_text = i.getStringExtra("Tags");
+        String[] tg_text = i.getStringExtra("TagFirst").split(",");
 
+        if(tg_text.length>1)
+            tags_text = tg_text[0]+tg_text[1];
+        tags_text = tg_text[0];
         //tvTags.setText(tags_text);
 
         try {

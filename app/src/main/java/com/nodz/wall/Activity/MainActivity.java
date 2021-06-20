@@ -139,7 +139,13 @@ public class MainActivity extends AppCompatActivity {
 
                     WallModel model = new WallModel(getApplicationContext(), list);
                     //model.setDown(jsonObject1.getString("downloads"));
-                    model.setTag(jsonObject1.getString("tags"));
+                    String [] tag = jsonObject1.getString("tags").split(",");
+                    Log.i("TAGSGSGSGS",tag[0]);
+                    if(tag.length<1)
+                        model.setTag(tag[0]);
+                    else
+                        model.setTag(tag[0]+tag[1]);
+
                     model.setUrl(jsonObject1.getString("largeImageURL"));
 
                     list.add(model);

@@ -51,15 +51,7 @@ public class SetWallpaperActivity extends AppCompatActivity {
         //tvTags = findViewById(R.id.tvTags);
 
         getSupportActionBar().hide();
-
-        Intent i = getIntent();
-        ImgUrl = i.getStringExtra("ImgUrl");
-        String[] tg_text = i.getStringExtra("TagFirst").split(",");
-
-        if(tg_text.length>1)
-            tags_text = tg_text[0]+tg_text[1];
-        tags_text = tg_text[0];
-        //tvTags.setText(tags_text);
+        ImgUrl = getIntent().getStringExtra("ImgUrl");
 
         try {
             Glide.with(this)
@@ -72,7 +64,6 @@ public class SetWallpaperActivity extends AppCompatActivity {
         btnSetWall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 GetImageFromUrl getImageFromUrl = new GetImageFromUrl();
                 getImageFromUrl.execute(ImgUrl);
 
@@ -132,12 +123,10 @@ public class SetWallpaperActivity extends AppCompatActivity {
             try {
                 inputStream = new URL(stringUrl).openStream();
                 bitmap = BitmapFactory.decodeStream(inputStream);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
             return bitmap;
-
         }
 
         @Override
@@ -154,8 +143,7 @@ public class SetWallpaperActivity extends AppCompatActivity {
 
             Bitmap bmp2 = Bitmap.createScaledBitmap(bitmap, imageSize, imageSize, true);
             WallpaperManager wallpaperManager = WallpaperManager.getInstance(getApplicationContext());
-//            wallpaperManager.setWallpaperOffsetSteps(1, 1);
-//            wallpaperManager.suggestDesiredDimensions(imageSize,imageSize);
+
             try {
                 wallpaperManager.setBitmap(bmp2);
                 Toast.makeText(SetWallpaperActivity.this, "Wallpaper Applied", Toast.LENGTH_SHORT).show();

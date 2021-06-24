@@ -1,5 +1,6 @@
 package com.nodz.wall.Apadter;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import com.bumptech.glide.request.RequestOptions;
+import com.nodz.wall.Activity.MainActivity;
 import com.nodz.wall.Activity.SetWallpaperActivity;
 import com.nodz.wall.R;
 import com.nodz.wall.Model.WallModel;
@@ -45,15 +48,14 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.MyViewHolder> 
     public void onBindViewHolder(@NonNull WallAdapter.MyViewHolder holder, int position) {
 
         WallModel model = list.get(position);
-        holder.tags.setText(model.getTag());
-        //        RequestOptions options = new RequestOptions()
-//                .centerCrop()
-//                .placeholder(R.drawable.progress_animation)
-//                .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                .dontAnimate()
-//                .dontTransform();
+        //holder.tags.setText(model.getTag());
+        RequestOptions options = new RequestOptions()
+                .placeholder(R.drawable.progress_animation)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .dontAnimate()
+                .dontTransform();
 
-        Glide.with(context).load(model.getUrl()).placeholder(R.drawable.progress_animation).into(holder.pict);
+        Glide.with(context).load(model.getUrl()).apply(options).into(holder.pict);
         // use .apply(options) for animations
 
         holder.pict.setOnClickListener(new View.OnClickListener() {
@@ -75,13 +77,11 @@ public class WallAdapter extends RecyclerView.Adapter<WallAdapter.MyViewHolder> 
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tags, down;
+        //TextView tags, down;
         ImageView pict;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            tags = itemView.findViewById(R.id.tags);
             pict = itemView.findViewById(R.id.imageView);
 
         }

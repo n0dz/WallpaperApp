@@ -7,4 +7,10 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- this is text color -->
+    <color name="textColorPrimary">#000000</color>
+    <!-- this is outline or stroke color -->
+    <color name="textInputOutlineColor">#00C853</color>
+
 </resources>

@@ -2,10 +2,7 @@ package com.nodz.wall.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -13,34 +10,23 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 import com.nodz.wall.R;
-import com.nodz.wall.Apadter.WallAdapter;
-import com.nodz.wall.Model.WallModel;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    ArrayList<WallModel> list;
-    String base = "https://pixabay.com/api/?key=21942328-3b403fd14df4f4bef82d7991b&q=";
-    String json_url = "";
-    EditText et;
-    Button findbtn;
+    TextInputEditText et;
+    MaterialButton findbtn;
+    //public  static ProgressBar p;
 
     @Override
     public void onBackPressed() {
@@ -51,12 +37,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getSupportActionBar().hide();
 
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setVisibility(View.INVISIBLE);
-        list = new ArrayList<>();
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
@@ -64,105 +47,28 @@ public class MainActivity extends AppCompatActivity {
         et = findViewById(R.id.etQuery);
         findbtn = findViewById(R.id.searchBtn);
 
+        findbtn.setOnClickListener(new View.OnClickListener() {
 
-        findbtn.setOnClickListener(new View.OnClickListener()
+            @Override
+            public void onClick(View v) {
+                if (et.getText().toString().isEmpty()) {
+                    return;
+                } else {
 
-            {
+//                    p = (ProgressBar)findViewById(R.id.progressBar1);
+//                    if(p.getVisibility() != View.VISIBLE){ // check if it is visible
+//                        p.setVisibility(View.VISIBLE); // if not set it to visible
+//                        v.setVisibility(View.VISIBLE); // use 1 or 2 as parameters.. arg0 is the view(your button) from the onclick listener
+//                    }
 
-                @Override
-                public void onClick (View v){
-                et.setVisibility(View.INVISIBLE);
-                findbtn.setVisibility(View.INVISIBLE);
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
 
-                json_url = base + et.getText().toString();
-
-                //Hide the keyboard after search
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-
-                GetData getData = new GetData();
-                getData.execute();
-                recyclerView.setVisibility(View.VISIBLE);
-            }
-            });
-    }
-
-
-    public class GetData extends AsyncTask<String, String, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            String current = "";
-            try {
-                URL url;
-                HttpURLConnection httpURLConnection = null;
-                try {
-                    url = new URL(json_url);
-                    httpURLConnection = (HttpURLConnection) url.openConnection();
-
-                    InputStream is = httpURLConnection.getInputStream();
-                    InputStreamReader isr = new InputStreamReader(is);
-
-                    int data = isr.read();
-
-                    while (data != -1) {
-                        current += (char) data;
-                        data = isr.read();
-                    }
-                    return current;
-
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (httpURLConnection != null) {
-                        httpURLConnection.disconnect();
-                    }
+                    Intent intent = new Intent(MainActivity.this, ResultsActivity.class);
+                    intent.putExtra("URL", et.getText().toString());
+                    startActivity(intent);
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-            return current;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            try {
-
-                JSONObject jsonObject = new JSONObject(s);
-                JSONArray jsonArray = jsonObject.getJSONArray("hits");
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-
-                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-                    WallModel model = new WallModel(getApplicationContext(), list);
-                    //model.setDown(jsonObject1.getString("downloads"));
-                    String [] tag = jsonObject1.getString("tags").split(",");
-                    Log.i("TAGSGSGSGS",tag[0]);
-                    if(tag.length<1)
-                        model.setTag(tag[0]);
-                    else
-                        model.setTag(tag[0]+tag[1]);
-
-                    model.setUrl(jsonObject1.getString("largeImageURL"));
-
-                    list.add(model);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            loadDataIntoRecyclerView(list);
-        }
+        });
     }
-
-            private void loadDataIntoRecyclerView(ArrayList<WallModel> list) {
-                WallAdapter adapter = new WallAdapter(this, list);
-                recyclerView.setAdapter(adapter);
-                recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-
-            }
-
-    }
+}
